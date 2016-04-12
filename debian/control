@@ -1,0 +1,22 @@
+Source: huayra-recovery
+Section: admin
+Priority: extra
+Maintainer: Huayra Devs <huarya-devel@listas.huayragnulinux.com.ar>
+Standards-Version: 3.9.6
+
+Package: huayra-recovery
+Architecture: all
+Depends: clonezilla
+Description: Scripts para el sistema de recuperación de las netbooks del PCI
+ Este paquete contiene los scripts para la particiones de recuperación que
+ tienen las netbooks del Programa Conectar Igualdad.
+ .
+ IMPORTANTE: Debido a la funcionalidad de estos scripts, el paquete debe
+ ser instalado SOLAMENTE en la partición de recuperación. Teniendo en cuenta
+ que fueron desarrollados para la Imágen 2016 de las nets.
+ .
+ El uso SIN CONOCIMIENTO COMPLETO del mismo puede provocar PERDIDA DE DATOS
+ e inclusive dejar la netbook SIN PODER INICIAR CORRECTAMENTE.
+ .
+ Por lo tanto NO UTILICE ESTE PAQUETE SI NO SABE LO QUE HACE.
+

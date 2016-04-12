@@ -1,0 +1,216 @@
+#!/bin/bash
+export DIALOGRC=dialogrc
+
+: ${DIALOG_OK=0}
+: ${DIALOG_CANCEL=1}
+: ${DIALOG_HELP=2}
+: ${DIALOG_EXTRA=3}
+: ${DIALOG_ITEM_HELP=4}
+: ${DIALOG_ESC=255}
+
+#
+# iniciar y detectar el cargardor
+#
+function inicio () 
+{
+	AC_ON=`acpi -a|grep -i "on-line"`
+	AC_ON=0
+	salir=0
+
+	if [ $AC_ON == 0 ]; then
+		menu_principal
+	fi
+	while [[ $AC_ON != 0  && $salir != 1 ]]; do
+
+		AC_ON=`acpi -a|grep -i "on-line"`
+		AC_ON=0
+		exec 3>&1
+		result=$(dialog --ok-label "Reintentar" \
+		--backtitle "Sistema de Recuperación" \
+		--colors \
+		--title "AVISO IMPORTANTE" \
+		--yesno "No se encontró el cargador conectado a la netbook. \n\nPor favor, conecte el equipo a la \Z1red eléctrica\Zn para continuar. \n\n¿Desea reintentar?"  0 0 \
+		2>&1 1>&3)
+
+		return_value=$?
+		exec 3>&-
+
+	case $return_value in
+	  $DIALOG_OK)
+		if [ $AC_ON == 0 ];then
+			menu_principal
+		fi
+		;;
+	  $DIALOG_CANCEL)
+		salir=1
+		;;
+	  $DIALOG_ESC)
+		salir=1
+		;;
+	esac
+	done
+
+	salir
+}
+
+function menu_principal ()
+{
+	exec 3>&1
+
+    result=$(dialog --nocancel --ok-label "Aceptar" \
+        --default-item "4" --backtitle "Sistema de Recuperación" --title "Elija la tarea a realizar" \
+        --menu  "" 14 50  4\
+        "1" "Restaurar Microsoft Windows 8.1"  \
+        "2" "Restaurar Huayra GNU/linux" \
+        "3" "Restaurar ambos Sistemas Operativos"  \
+        "4" "Salir" 2>&1 1>&3)
+
+	return_value=$?
+	exec 3>&-
+	case $return_value in
+	  $DIALOG_OK)
+		case $result in
+			1)
+				restaurar_windows
+			;;
+			2)
+				restaurar_huayra
+			;;
+			3)
+				restaurar_ambos
+			;;
+			4)
+				salir
+			;;
+		esac
+		;;
+	  $DIALOG_CANCEL)
+		salir=1
+		;;
+	  $DIALOG_ESC)
+		salir=1
+		;;
+	esac
+ 	
+}
+
+function salir() 
+{
+	dialog \
+		--backtitle "Sistema de Recuperación" \
+		--colors \
+		--title "AVISO IMPORTANTE" \
+		--msgbox "El equipo se apagará" 5 40
+	echo "poweroff"
+	exit 0
+
+}
+
+function saludo()
+{
+
+exec 3>&1
+result=$(dialog \
+		--ok-label "Aceptar" \
+        --backtitle "Sistema de Recuperación" \
+        --title "AVISO IMPORTANTE" \
+        --colors \
+        --yesno  "Mediante esta herramienta, Usted puede restaurar las particiones de los Sistemas Operativos a las imágenes oririginales de fábrica. \n\nLa información que se encuentre en la particion de DATOS \Z1no será modificada\Zn. \nSin embargo, cualquier dato que haya sido guardado en las particiones de los Sistemas Operativos \Z1se perderá definitivamente\Zn.\n\n¿Desea continuar?" 0 0 2>&1 1>&3)
+
+	return_value=$?
+	exec 3>&-
+
+	case $return_value in
+	  $DIALOG_OK)
+		;;
+	  $DIALOG_CANCEL)
+		salir
+		;;
+	  $DIALOG_ESC)
+		salir
+		;;
+	esac
+       
+}
+
+function restaurar_huayra() 
+{
+	exec 3>&1
+	result=$(dialog \
+		--backtitle "Sistema de Recuperación" \
+		--title "RESTAURAR HUAYRA GNU/Linux" \
+		--yesno "Se va a restaurar el Sistema Operativo Huayra GNU/Linux a la imágen original de fábrica. \n\nLa información que se encuentre en la partición de DATOS no será modificada. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
+
+	return_value=$?
+	exec 3>&-
+
+	case $return_value in
+	  $DIALOG_OK)
+		echo "Resturando Huayra"
+		ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3
+		;;
+	  $DIALOG_CANCEL)
+		inicio
+		;;
+	  $DIALOG_ESC)
+		inicio
+		;;
+	esac
+
+}
+function restaurar_windows() 
+{
+	exec 3>&1
+	result=$(dialog \
+		--backtitle "Sistema de Recuperación" \
+		--title "RESTAURAR WINDOWS" \
+		--yesno "Se va a restaurar el Sistema Operativo Windows a la imágen original de fábrica. \n\nLa información que se encuentre en la partición de DATOS no será modificada. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
+
+	return_value=$?
+	exec 3>&-
+
+	case $return_value in
+	  $DIALOG_OK)
+		echo "Resturando Windows"
+		ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5
+		;;
+	  $DIALOG_CANCEL)
+		inicio
+		;;
+	  $DIALOG_ESC)
+		inicio
+		;;
+	esac
+
+}
+function restaurar_ambos() 
+{
+	exec 3>&1
+	result=$(dialog \
+		--backtitle "Sistema de Recuperación" \
+		--title "RESTAURAR AMBOS SISTEMAS" \
+		--yesno "Se van a restaurar los Sistemas Operativos Huayra GNU/linux y Windows a la imágen original de fábrica. \n\nLa información que se encuentre en la partición de DATOS no será modificada. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
+
+	return_value=$?
+	exec 3>&-
+
+	case $return_value in
+	  $DIALOG_OK)
+		echo "Resturando Ambos sistemas" 
+		ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3
+		ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5
+		;;
+	  $DIALOG_CANCEL)
+		inicio
+		;;
+	  $DIALOG_ESC)
+		inicio
+		;;
+	esac
+
+}
+
+## main
+# mostrar intro
+saludo
+inicio
