@@ -7,7 +7,7 @@ Standards-Version: 3.9.6
 
 Package: huayra-recovery
 Architecture: all
-Depends:  coreutils (>= 8.23), clonezilla
+Depends:  coreutils (>= 8.23), clonezilla, dialog
 Description: Scripts para el sistema de recuperación de las netbooks del PCI
  Este paquete contiene los scripts para la particiones de recuperación que
  tienen las netbooks del Programa Conectar Igualdad.
