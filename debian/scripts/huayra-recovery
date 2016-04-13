@@ -1,5 +1,11 @@
 #!/bin/bash
-export DIALOGRC=dialogrc
+
+if [ -z $DIALOGRC ]; then
+    DIALOGRC=/etc/huayra/dialogrc
+fi
+
+echo $DIALOGRC >/tmp/ee
+export DIALOGRC
 
 : ${DIALOG_OK=0}
 : ${DIALOG_CANCEL=1}

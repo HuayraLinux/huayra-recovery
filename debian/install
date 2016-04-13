@@ -1,2 +1,2 @@
-dialogrc	etc/huayra/
-huayra-recovery	usr/sbin/
+debian/dialogrc	etc/huayra/
+debian/scripts/huayra-recovery	usr/sbin/
