@@ -1,0 +1,17 @@
+[Unit]
+Description=Sistema de Recuperación
+Documentation=man:huayra-recovery
+After=network.target
+
+[Service]
+Restart=on-failure
+EnvironmentFile=-/etc/default/huayra-recovery
+ExecStart=/usr/sbin/huayra-recovery
+User=root
+Group=root
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty1
+
+[Install]
+WantedBy=multi-user.target

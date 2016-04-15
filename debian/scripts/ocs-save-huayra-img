@@ -1,0 +1,8 @@
+#
+# Guarda la imágen de Huayra en la partición de recuperación
+#
+
+if [ ! -d /home/partimag ];
+    mkdir -p /home/partimag
+fi
+ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img sda1 sda3

@@ -4,7 +4,6 @@ if [ -z $DIALOGRC ]; then
     DIALOGRC=/etc/huayra/dialogrc
 fi
 
-echo $DIALOGRC >/tmp/ee
 export DIALOGRC
 
 : ${DIALOG_OK=0}
@@ -15,22 +14,32 @@ export DIALOGRC
 : ${DIALOG_ESC=255}
 
 #
-# iniciar y detectar el cargardor
+# iniciar y detectar el cargador
 #
 function inicio () 
 {
-	AC_ON=`acpi -a|grep -i "on-line"`
 	salir=0
+
+	AC_ON=`acpi -a|grep -i "on-line"`
+	if [ $CONECTADO == 1 ]; then
+		AC_ON=0
+	fi
 
 	if [ $AC_ON == 0 ]; then
 		menu_principal
 	fi
+
 	while [[ $AC_ON != 0  && $salir != 1 ]]; do
 
+
 		AC_ON=`acpi -a|grep -i "on-line"`
+		if [ $CONECTADO == 1 ]; then
+			AC_ON=0
+		fi
+		
 		exec 3>&1
 		result=$(dialog --ok-label "Reintentar" \
-        --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
+		--backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
 		--colors \
 		--title " \Z3AVISO IMPORTANTE\Zn " \
 		--yesno "No se encontró el cargador conectado a la netbook. \n\nPor favor, conecte el equipo a la \Z3red eléctrica\Zn para continuar. \n\n¿Desea reintentar?"  0 0 \
@@ -39,19 +48,19 @@ function inicio ()
 		return_value=$?
 		exec 3>&-
 
-	case $return_value in
-	  $DIALOG_OK)
-		if [ $AC_ON == 0 ];then
-			menu_principal
-		fi
-		;;
-	  $DIALOG_CANCEL)
-		salir=1
-		;;
-	  $DIALOG_ESC)
-		salir=1
-		;;
-	esac
+		case $return_value in
+		  $DIALOG_OK)
+			if [ $AC_ON == 0 ];then
+				menu_principal
+			fi
+			;;
+		  $DIALOG_CANCEL)
+			salir=1
+			;;
+		  $DIALOG_ESC)
+			salir=1
+			;;
+		esac
 	done
 
 	salir
@@ -62,15 +71,19 @@ function menu_principal ()
 	exec 3>&1
 
     result=$(dialog --nocancel --ok-label "Aceptar" \
-        --default-item "4" --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \ --title " \Z3Elija la tarea a realizar\Zn " \
-        --menu  "" 14 50  4\
+        --default-item "4" --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
+		--colors \
+        --title " \Z3Elija la tarea a realizar\Zn " \
+        --menu  "" 14 50  6\
         "1" "Restaurar Microsoft Windows 8.1"  \
         "2" "Restaurar Huayra GNU/linux" \
         "3" "Restaurar ambos Sistemas Operativos"  \
+        "" "-----------------------------------" \
         "4" "Salir" 2>&1 1>&3)
 
 	return_value=$?
 	exec 3>&-
+
 	case $return_value in
 	  $DIALOG_OK)
 		case $result in
@@ -82,6 +95,9 @@ function menu_principal ()
 			;;
 			3)
 				restaurar_ambos
+			;;
+			"")
+				menu_principal
 			;;
 			4)
 				salir
@@ -105,7 +121,11 @@ function salir()
 		--colors \
 		--title " \Z3AVISO IMPORTANTE\Zn " \
 		--msgbox "El equipo se apagará" 5 40
-	echo "poweroff"
+	if [ $DEBUG == 1 ]; then
+		dialog --title "Debug" --msgbox "Poweroff" 0 0
+	else 
+		poweroff
+	fi
 	exit 0
 
 }
@@ -113,9 +133,8 @@ function salir()
 function saludo()
 {
 
-exec 3>&1
-result=$(dialog \
-		--ok-label "Aceptar" \
+	exec 3>&1
+	result=$(dialog --ok-label "Aceptar" \
         --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
         --title " \Z3AVISO IMPORTANTE\Zn " \
         --colors \
@@ -142,6 +161,7 @@ function restaurar_huayra()
 	exec 3>&1
 	result=$(dialog \
         --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
+		--colors \
 		--title " \Z3RESTAURAR HUAYRA GNU/Linux\Zn " \
 		--yesno "Se va a restaurar el Sistema Operativo Huayra GNU/Linux a la imágen original de fábrica. \n\nLa información que se encuentre en la partición de DATOS no será modificada. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
 
@@ -150,8 +170,13 @@ function restaurar_huayra()
 
 	case $return_value in
 	  $DIALOG_OK)
-		echo "Resturando Huayra"
-		ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3
+		if [ $DEBUG == 1 ]; then
+			dialog --title "Debug" \
+			--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3" 0 0
+		else
+			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3
+		fi
+		
 		;;
 	  $DIALOG_CANCEL)
 		inicio
@@ -167,6 +192,7 @@ function restaurar_windows()
 	exec 3>&1
 	result=$(dialog \
         --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
+		--colors \
 		--title " \Z3RESTAURAR WINDOWS\Zn " \
 		--yesno "Se va a restaurar el Sistema Operativo Windows a la imágen original de fábrica. \n\nLa información que se encuentre en la partición de DATOS no será modificada. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
 
@@ -175,8 +201,12 @@ function restaurar_windows()
 
 	case $return_value in
 	  $DIALOG_OK)
-		echo "Resturando Windows"
-		ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5
+		if [ $DEBUG == 1 ]; then
+			dialog --title "Debug" \
+				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5" 0 0
+		else
+			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5
+		fi
 		;;
 	  $DIALOG_CANCEL)
 		inicio
@@ -192,6 +222,7 @@ function restaurar_ambos()
 	exec 3>&1
 	result=$(dialog \
         --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
+		--colors \
 		--title " \Z3RESTAURAR AMBOS SISTEMAS\Zn " \
 		--yesno "Se van a restaurar los Sistemas Operativos Huayra GNU/linux y Windows a la imágen original de fábrica. \n\nLa información que se encuentre en la partición de DATOS no será modificada. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
 
@@ -200,9 +231,13 @@ function restaurar_ambos()
 
 	case $return_value in
 	  $DIALOG_OK)
-		echo "Resturando Ambos sistemas" 
-		ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3
-		ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5
+		if [ $DEBUG == 1 ]; then
+			dialog --title "Debug" \
+				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3\n\nocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5" 0 0
+		else
+			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3
+			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5
+		fi
 		;;
 	  $DIALOG_CANCEL)
 		inicio
