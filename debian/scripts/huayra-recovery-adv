@@ -1,0 +1,55 @@
+function menu_avanzado() {
+
+	exec 3>&1
+	
+	result=$(dialog --nocancel --ok-label "Aceptar" \
+			--default-item "X" --backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
+			--colors \
+			--title " \Z3Elija la tarea a realizar\Zn " \
+			--menu  "" 15 80  6 \
+			"1" "Guardar partición de Windows 8.1 al disco de recuperación" \
+			"2" "Guardar partición de Huayra GNU/Linux al disco de recuperación" \
+			"3" "Guardar ambos Sistemas Operativos al disco de recuperación" \
+			"4" "Limpieza de Historial para preparar Imágen" \
+			"5" "Eliminar \Z3permanentemente\Zn éste menu" \
+			"X" "Volver al Menu Principal" 2>&1 1>&3)
+
+	return_value=$?
+	exec 3>&-
+
+	case $return_value in
+	  $DIALOG_OK)
+		case $result in
+			1)
+				guardar_windows
+			;;
+			2)
+				guardar_huayra
+			;;
+			3)
+				guardar_ambos
+			;;
+			"")
+				menu_avanzado
+			;;
+			4)
+				limpieza_particiones
+			;;
+			4)
+				eliminar_menu_adv
+			;;
+			
+			X)
+				menu_principal
+			;;
+		esac
+		;;
+	  $DIALOG_CANCEL)
+		menu_principal
+		;;
+	  $DIALOG_ESC)
+		menu_principal
+		;;
+	esac	
+	
+}

@@ -4,6 +4,9 @@ if [ -z $DIALOGRC ]; then
     DIALOGRC=/etc/huayra/dialogrc
 fi
 
+if [-z $ADV_MENU ]; then
+	$ADV_MENU=/usr/share/huayra-recovery/huayra-recovery-adv
+fi
 export DIALOGRC
 
 : ${DIALOG_OK=0}
@@ -69,18 +72,32 @@ function inicio ()
 function menu_principal ()
 {
 	exec 3>&1
+	if [ -f $ADV_MENU ]; then
+		result=$(dialog --nocancel --ok-label "Aceptar" \
+			--default-item "X" --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
+			--colors \
+			--title " \Z3Elija la tarea a realizar\Zn " \
+			--menu  "" 14 50  6\
+			"1" "Restaurar Microsoft Windows 8.1"  \
+			"2" "Restaurar Huayra GNU/linux" \
+			"3" "Restaurar ambos Sistemas Operativos"  \
+			"" "-----------------------------------" \
+			"4" "Menu Avanzado" \
+			"X" "Salir" 2>&1 1>&3)
+	
+	else
+		result=$(dialog --nocancel --ok-label "Aceptar" \
+			--default-item "X" --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
+			--colors \
+			--title " \Z3Elija la tarea a realizar\Zn " \
+			--menu  "" 14 50  6\
+			"1" "Restaurar Microsoft Windows 8.1"  \
+			"2" "Restaurar Huayra GNU/linux" \
+			"3" "Restaurar ambos Sistemas Operativos"  \
+			"" "-----------------------------------" \
+			"X" "Salir" 2>&1 1>&3)
 
-    result=$(dialog --nocancel --ok-label "Aceptar" \
-        --default-item "4" --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
-		--colors \
-        --title " \Z3Elija la tarea a realizar\Zn " \
-        --menu  "" 14 50  6\
-        "1" "Restaurar Microsoft Windows 8.1"  \
-        "2" "Restaurar Huayra GNU/linux" \
-        "3" "Restaurar ambos Sistemas Operativos"  \
-        "" "-----------------------------------" \
-        "4" "Salir" 2>&1 1>&3)
-
+	fi
 	return_value=$?
 	exec 3>&-
 
@@ -100,6 +117,10 @@ function menu_principal ()
 				menu_principal
 			;;
 			4)
+				source $ADV_MENU
+				menu_avanzado
+			;;
+			X)
 				salir
 			;;
 		esac
@@ -111,6 +132,7 @@ function menu_principal ()
 		salir=1
 		;;
 	esac
+	
  	
 }
 
