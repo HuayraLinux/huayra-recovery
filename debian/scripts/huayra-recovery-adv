@@ -172,11 +172,15 @@ function eliminar_menu_adv
 
 	case $return_value in
 	  $DIALOG_OK)
-		if [ $DEBUG==1 ]; then
+		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" --msgbox "Eliminando archivo de menu" 0 0
 		else
 			rm -f /usr/share/huayra-recovery/huayra-recovery-adv
 		fi
+		dialog --ok-label "Aceptar" \
+			--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
+			--colors \
+			--title "Menu avanzado" --msgbox "El archivo ha sido eliminado" 0 0 
 		menu_principal
 		;;
 	  $DIALOG_CANCEL)

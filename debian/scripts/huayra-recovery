@@ -1,5 +1,8 @@
 #!/bin/bash
 
+sleep 15
+chvt 10
+
 # Constantes de Dialog
 : ${DIALOG_OK=0}
 : ${DIALOG_CANCEL=1}
@@ -17,6 +20,16 @@ if [ -z $ADV_MENU ]; then
 	ADV_MENU=/usr/share/huayra-recovery/huayra-recovery-adv
 fi
 export ADV_MENU
+
+if [ -z $DEBUG ]; then
+    DEBUG=0
+fi
+export DEBUG
+
+if [ -z $CONECTADO ]; then
+    CONECTADO=0
+fi
+export CONECTADO
 
 # Particiones para guardar/recuperar
 PARTS_WIN="sda2 sda3 sda4 sda5"
@@ -161,6 +174,7 @@ function salir
 		--colors \
 		--title " \Z3AVISO IMPORTANTE\Zn " \
 		--msgbox "El equipo se apagará" 5 40
+		
 	if [ $DEBUG == 1 ]; then
 		dialog --title "Debug" --msgbox "Poweroff" 0 0
 	else 

@@ -1,17 +1,17 @@
 [Unit]
 Description=Sistema de Recuperación
 Documentation=man:huayra-recovery
-After=network.target
+After=getty@tty1.service
 
 [Service]
-Restart=on-failure
+Type=idle
 EnvironmentFile=-/etc/default/huayra-recovery
 ExecStart=/usr/sbin/huayra-recovery
 User=root
 Group=root
 StandardInput=tty
 StandardOutput=tty
-TTYPath=/dev/tty1
+TTYPath=/dev/tty10
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
