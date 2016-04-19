@@ -1,4 +1,55 @@
-function menu_avanzado() {
+function limpieza_particiones() 
+{
+	exec 3>&1
+	result=$(dialog --backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
+		--title "Eliminar historial de particiones" \
+		--colors \
+		--yesno "¿Desea eliminar archivos de logs e historiales para preparar las particiones, antes de hacer la imágen final?" 8 60 2>&1 1>&3)
+
+	return_value=$?
+	exec 3>&-
+
+	case $return_value in
+	  $DIALOG_OK)
+		if [ $DEBUG == 1 ]; then
+			dialog --msgbox "Eliminando archivos" 0 0
+		else
+			TMPMOUNT=`mktemp -d`
+			mount $ROOT_HUAYRA $TMPMOUNT
+			rm -f $TMPMOUNT/root/.bash_history
+			rm -rf $TMPMOUNT/root/.config
+			rm -rf $TMPMOUNT/root/.local
+			rm -f $TMPMOUNT/etc/udev/rules.d/70-persistent-net.rules
+			rm -f $TMPMOUNT/etc/NetworkManager/system-connection/*
+			rm -f $TMPMOUNT/var/cache/apt/archives/*.deb
+			rm -f $TMPMOUNT/var/backups/*.gz
+			rm -f $TMPMOUNT/var/log/*.gz
+			rm -f $TMPMOUNT/var/log/ConsoleKit/*.gz
+			rm -f $TMPMOUNT/var/log/cups/*.gz
+			rm -f $TMPMOUNT/var/lib/apt/lists/*.gz
+			rm -f $TMPMOUNT/home/alumno/.bash_history
+			rm -rf $TMPMOUNT/home/alumno/.cache
+			rm -rf $TMPMOUNT/home/alumno/.adobe
+			rm -f $TMPMOUNT/home/alumno/.local/share/Trash/files/*
+			rm -f $TMPMOUNT/home/alumno/.local/share/Trash/info/*
+			rm -rf $TMPMOUNT/home/alumno/.mozilla
+			rm -f $TMPMOUNT/home/alumno/.xsession-errors*
+			umount $TMPMOUNT
+		fi
+		menu_avanzado
+		;;
+	  $DIALOG_CANCEL)
+		menu_avanzado
+		;;
+	  $DIALOG_ESC)
+		menu_avanzado
+		;;
+	esac
+
+}
+
+function menu_avanzado()
+{
 
 	exec 3>&1
 	
@@ -29,16 +80,15 @@ function menu_avanzado() {
 			3)
 				guardar_ambos
 			;;
-			"")
-				menu_avanzado
-			;;
 			4)
 				limpieza_particiones
 			;;
-			4)
+			5)
 				eliminar_menu_adv
 			;;
-			
+			"")
+				menu_avanzado
+			;;
 			X)
 				menu_principal
 			;;
@@ -52,4 +102,82 @@ function menu_avanzado() {
 		;;
 	esac	
 	
+}
+function guardar_windows() 
+{
+	dialog --nocancel \
+		--ok-label "Aceptar" \
+		--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
+		--colors \
+		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_WIN\Zn como imágen de Restauración de Windows" 0 0
+	if [ $DEBUG == 1 ]; then
+		dialog --msgbox "ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
+	else
+		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN
+	fi
+	menu_avanzado
+}
+
+function guardar_huayra() 
+{
+	dialog --nocancel \
+		--ok-label "Aceptar" \
+		--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
+		--colors \
+		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_HUAYRA\Zn como imágen de Restauración de Huayra GNU/Linux" 0 0
+	if [ $DEBUG == 1 ]; then
+		dialog --msgbox "ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA" 0 0
+	else
+		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
+	fi
+	menu_avanzado
+}
+
+function guardar_ambos() 
+{
+	dialog --nocancel \
+		--ok-label "Aceptar" \
+		--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
+		--colors \
+		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_HUAYRA\Zn como imágen de Restauración de Huayra GNU/Linux asi como \Z2$PARTS_WIN\Zn para Windows" 0 0
+	if [ $DEBUG == 1 ]; then
+		dialog --msgbox "ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA\n\nocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
+	else
+		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
+		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN
+	fi
+	menu_avanzado
+	
+}
+
+
+function eliminar_menu_adv()
+{
+	exec 3>&1
+	result=$(dialog --backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
+		--title "Eliminar menu avanzado" \
+		--colors \
+		--yesno "Ésta operación va a \Z2eliminar permanentemente\Zn éste menú avanzado de la herramienta.\n\nNo podrá volver a acceder al mismo, una vez realizada dicha operación\n\n¿Desea eliminar archivos de logs e historiales\npara preparar las particiones antes de hacer la imágen final?" 0 0 2>&1 1>&3)
+
+	return_value=$?
+	exec 3>&-
+
+	case $return_value in
+	  $DIALOG_OK)
+		if [ $DEBUG == 1 ]; then
+			dialog --msgbox "Eliminando archivo de menu" 0 0
+		else
+			rm -f /usr/share/huayra-recovery/huayra-recovery-adv
+		fi
+		menu_principal
+		;;
+	  $DIALOG_CANCEL)
+		menu_avanzado
+		;;
+	  $DIALOG_ESC)
+		menu_avanzado
+		;;
+	esac
+
+
 }

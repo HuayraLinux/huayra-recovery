@@ -16,6 +16,13 @@ export DIALOGRC
 : ${DIALOG_ITEM_HELP=4}
 : ${DIALOG_ESC=255}
 
+# Particiones para guardar/recuperar
+PARTS_WIN="sda2 sda3 sda4 sda5"
+PARTS_HUAYRA="sda1 sda3"
+
+# root donde se encuentra Huayra instalado (para eliminar temporales)
+ROOT_HUAYRA="/dev/sda1"
+
 #
 # iniciar y detectar el cargador
 #
@@ -194,9 +201,9 @@ function restaurar_huayra()
 	  $DIALOG_OK)
 		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" \
-			--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3" 0 0
+			--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA" 0 0
 		else
-			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3
+			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA
 		fi
 		
 		;;
@@ -225,9 +232,9 @@ function restaurar_windows()
 	  $DIALOG_OK)
 		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" \
-				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5" 0 0
+				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN" 0 0
 		else
-			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5
+			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN
 		fi
 		;;
 	  $DIALOG_CANCEL)
@@ -255,10 +262,10 @@ function restaurar_ambos()
 	  $DIALOG_OK)
 		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" \
-				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3\n\nocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5" 0 0
+				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA\n\nocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN" 0 0
 		else
-			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img sda1 sda3
-			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img sda2 sda3 sda4 sda5
+			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA
+			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN
 		fi
 		;;
 	  $DIALOG_CANCEL)
