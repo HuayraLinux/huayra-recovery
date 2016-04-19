@@ -1,20 +1,22 @@
 #!/bin/bash
 
-if [ -z $DIALOGRC ]; then
-    DIALOGRC=/etc/huayra/dialogrc
-fi
-
-if [-z $ADV_MENU ]; then
-	$ADV_MENU=/usr/share/huayra-recovery/huayra-recovery-adv
-fi
-export DIALOGRC
-
+# Constantes de Dialog
 : ${DIALOG_OK=0}
 : ${DIALOG_CANCEL=1}
 : ${DIALOG_HELP=2}
 : ${DIALOG_EXTRA=3}
 : ${DIALOG_ITEM_HELP=4}
 : ${DIALOG_ESC=255}
+
+if [ -z $DIALOGRC ]; then
+    DIALOGRC=/etc/huayra/dialogrc
+fi
+export DIALOGRC
+
+if [ -z $ADV_MENU ]; then
+	ADV_MENU=/usr/share/huayra-recovery/huayra-recovery-adv
+fi
+export ADV_MENU
 
 # Particiones para guardar/recuperar
 PARTS_WIN="sda2 sda3 sda4 sda5"
@@ -25,26 +27,32 @@ export PARTS_HAUYRA
 # root donde se encuentra Huayra instalado (para eliminar temporales)
 ROOT_HUAYRA="/dev/sda1"
 export ROOT_HUAYRA
+
 #
 # iniciar y detectar el cargador
 #
-function inicio () 
+function inicio 
 {
 	salir=0
 
-	AC_ON=`acpi -a|grep -i "on-line"`
-	if [ $CONECTADO==1 ]; then
+	acpi -a|grep -i "on-line"
+	AC_ON=$?
+	
+	if [ $CONECTADO == 1 ]; then
+
 		AC_ON=0
 	fi
 
-	if [ $AC_ON==0 ]; then
+	if [ $AC_ON == 0 ]; then
 		menu_principal
 	fi
 
-	while [[ $AC_ON!=0  && $salir!=1 ]]; do
+	while [[ $AC_ON != 0  && $salir != 1 ]]; do
 
-		AC_ON=`acpi -a|grep -i "on-line"`
-		if [ $CONECTADO==1 ]; then
+		acpi -a|grep -i "on-line"
+		AC_ON=$?
+		
+		if [ $CONECTADO == 1 ]; then
 			AC_ON=0
 		fi
 		
@@ -61,7 +69,7 @@ function inicio ()
 
 		case $return_value in
 		  $DIALOG_OK)
-			if [ $AC_ON==0 ];then
+			if [ $AC_ON == 0 ];then
 				menu_principal
 			fi
 			;;
@@ -77,7 +85,8 @@ function inicio ()
 	salir
 }
 
-function menu_principal ()
+# Menu de incio de opciones
+function menu_principal
 {
 	exec 3>&1
 	if [ -f $ADV_MENU ]; then
@@ -144,14 +153,15 @@ function menu_principal ()
  	
 }
 
-function salir() 
+# Poweroff!
+function salir
 {
 	dialog \
         --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
 		--colors \
 		--title " \Z3AVISO IMPORTANTE\Zn " \
 		--msgbox "El equipo se apagará" 5 40
-	if [ $DEBUG==1 ]; then
+	if [ $DEBUG == 1 ]; then
 		dialog --title "Debug" --msgbox "Poweroff" 0 0
 	else 
 		poweroff
@@ -160,7 +170,8 @@ function salir()
 
 }
 
-function saludo()
+# Mensaje de bienvenida
+function saludo
 {
 
 	exec 3>&1
@@ -186,7 +197,8 @@ function saludo()
        
 }
 
-function restaurar_huayra() 
+# Restaurar la imagen de Huayra
+function restaurar_huayra
 {
 	exec 3>&1
 	result=$(dialog \
@@ -200,7 +212,7 @@ function restaurar_huayra()
 
 	case $return_value in
 	  $DIALOG_OK)
-		if [ $DEBUG==1 ]; then
+		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" \
 			--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA" 0 0
 		else
@@ -217,7 +229,9 @@ function restaurar_huayra()
 	esac
 
 }
-function restaurar_windows() 
+
+# Restaurar la imagen de Windows
+function restaurar_windows
 {
 	exec 3>&1
 	result=$(dialog \
@@ -231,7 +245,7 @@ function restaurar_windows()
 
 	case $return_value in
 	  $DIALOG_OK)
-		if [ $DEBUG==1 ]; then
+		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" \
 				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN" 0 0
 		else
@@ -247,7 +261,9 @@ function restaurar_windows()
 	esac
 
 }
-function restaurar_ambos() 
+
+# Restaurar ambas imagenes de los sistemas operativos
+function restaurar_ambos
 {
 	exec 3>&1
 	result=$(dialog \
@@ -261,7 +277,7 @@ function restaurar_ambos()
 
 	case $return_value in
 	  $DIALOG_OK)
-		if [ $DEBUG==1 ]; then
+		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" \
 				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA\n\nocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN" 0 0
 		else
@@ -280,6 +296,6 @@ function restaurar_ambos()
 }
 
 ## main
-# mostrar intro
+## mostrar intro
 saludo
 inicio
