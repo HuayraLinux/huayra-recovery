@@ -19,10 +19,12 @@ export DIALOGRC
 # Particiones para guardar/recuperar
 PARTS_WIN="sda2 sda3 sda4 sda5"
 PARTS_HUAYRA="sda1 sda3"
+export PARTS_WIN
+export PARTS_HAUYRA
 
 # root donde se encuentra Huayra instalado (para eliminar temporales)
 ROOT_HUAYRA="/dev/sda1"
-
+export ROOT_HUAYRA
 #
 # iniciar y detectar el cargador
 #
@@ -31,19 +33,18 @@ function inicio ()
 	salir=0
 
 	AC_ON=`acpi -a|grep -i "on-line"`
-	if [ $CONECTADO == 1 ]; then
+	if [ $CONECTADO==1 ]; then
 		AC_ON=0
 	fi
 
-	if [ $AC_ON == 0 ]; then
+	if [ $AC_ON==0 ]; then
 		menu_principal
 	fi
 
-	while [[ $AC_ON != 0  && $salir != 1 ]]; do
-
+	while [[ $AC_ON!=0  && $salir!=1 ]]; do
 
 		AC_ON=`acpi -a|grep -i "on-line"`
-		if [ $CONECTADO == 1 ]; then
+		if [ $CONECTADO==1 ]; then
 			AC_ON=0
 		fi
 		
@@ -60,7 +61,7 @@ function inicio ()
 
 		case $return_value in
 		  $DIALOG_OK)
-			if [ $AC_ON == 0 ];then
+			if [ $AC_ON==0 ];then
 				menu_principal
 			fi
 			;;
@@ -150,7 +151,7 @@ function salir()
 		--colors \
 		--title " \Z3AVISO IMPORTANTE\Zn " \
 		--msgbox "El equipo se apagará" 5 40
-	if [ $DEBUG == 1 ]; then
+	if [ $DEBUG==1 ]; then
 		dialog --title "Debug" --msgbox "Poweroff" 0 0
 	else 
 		poweroff
@@ -199,7 +200,7 @@ function restaurar_huayra()
 
 	case $return_value in
 	  $DIALOG_OK)
-		if [ $DEBUG == 1 ]; then
+		if [ $DEBUG==1 ]; then
 			dialog --title "Debug" \
 			--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA" 0 0
 		else
@@ -230,7 +231,7 @@ function restaurar_windows()
 
 	case $return_value in
 	  $DIALOG_OK)
-		if [ $DEBUG == 1 ]; then
+		if [ $DEBUG==1 ]; then
 			dialog --title "Debug" \
 				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN" 0 0
 		else
@@ -260,7 +261,7 @@ function restaurar_ambos()
 
 	case $return_value in
 	  $DIALOG_OK)
-		if [ $DEBUG == 1 ]; then
+		if [ $DEBUG==1 ]; then
 			dialog --title "Debug" \
 				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA\n\nocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN" 0 0
 		else

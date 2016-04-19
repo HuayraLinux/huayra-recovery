@@ -11,7 +11,7 @@ function limpieza_particiones()
 
 	case $return_value in
 	  $DIALOG_OK)
-		if [ $DEBUG == 1 ]; then
+		if [ $DEBUG==1 ]; then
 			dialog --msgbox "Eliminando archivos" 0 0
 		else
 			TMPMOUNT=`mktemp -d`
@@ -110,7 +110,7 @@ function guardar_windows()
 		--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
 		--colors \
 		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_WIN\Zn como imágen de Restauración de Windows" 0 0
-	if [ $DEBUG == 1 ]; then
+	if [ $DEBUG==1 ]; then
 		dialog --msgbox "ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
 	else
 		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN
@@ -125,7 +125,7 @@ function guardar_huayra()
 		--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
 		--colors \
 		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_HUAYRA\Zn como imágen de Restauración de Huayra GNU/Linux" 0 0
-	if [ $DEBUG == 1 ]; then
+	if [ $DEBUG==1 ]; then
 		dialog --msgbox "ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA" 0 0
 	else
 		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
@@ -140,7 +140,7 @@ function guardar_ambos()
 		--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
 		--colors \
 		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_HUAYRA\Zn como imágen de Restauración de Huayra GNU/Linux asi como \Z2$PARTS_WIN\Zn para Windows" 0 0
-	if [ $DEBUG == 1 ]; then
+	if [ $DEBUG==1 ]; then
 		dialog --msgbox "ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA\n\nocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
 	else
 		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
@@ -164,7 +164,7 @@ function eliminar_menu_adv()
 
 	case $return_value in
 	  $DIALOG_OK)
-		if [ $DEBUG == 1 ]; then
+		if [ $DEBUG==1 ]; then
 			dialog --msgbox "Eliminando archivo de menu" 0 0
 		else
 			rm -f /usr/share/huayra-recovery/huayra-recovery-adv
