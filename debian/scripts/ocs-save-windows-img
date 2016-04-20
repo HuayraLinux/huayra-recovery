@@ -1,7 +1,0 @@
-#
-# Guarda la imágen de Windows en la partición de recuperación
-#
-if [ -d /home/patimage ]; then
-    mkdir -p /home/partimag
-fi
-ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img sda2 sda3 sda4 sda5

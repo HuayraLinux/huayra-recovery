@@ -1,6 +1,12 @@
+huayra-recovery (1.1) unstable; urgency=medium
+
+  * fix warnings de lintian
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Wed, 20 Apr 2016 13:14:25 -0300
+
 huayra-recovery (1.0) unstable; urgency=medium
 
   * Initial commit
 
- -- Fernando Toledo <ragnarok@docksud.com.ar>  Wed, 16 Apr 2016 12:51:37 -0300
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Sat, 16 Apr 2016 12:51:37 -0300
 
