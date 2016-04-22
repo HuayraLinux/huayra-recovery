@@ -115,10 +115,10 @@ function guardar_windows
 		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_WIN\Zn como imágen de Restauración de Windows" 0 0
 	
 	if [ $DEBUG == 1 ]; then
-		dialog --title "Debug" --msgbox "ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
+		dialog --title "Debug" --msgbox "ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
 	else
 		efi_umount
-		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN
+		ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN
 	fi
 	menu_avanzado
 }
@@ -133,10 +133,10 @@ function guardar_huayra
 		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_HUAYRA\Zn como imágen de Restauración de Huayra GNU/Linux" 0 0
 	
 	if [ $DEBUG == 1 ]; then
-		dialog --title "Debug" --msgbox "ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA" 0 0
+		dialog --title "Debug" --msgbox "ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA" 0 0
 	else
 		efi_umount
-		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
+		ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
 	fi
 	menu_avanzado
 }
@@ -151,11 +151,11 @@ function guardar_ambos
 		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_HUAYRA\Zn como imágen de Restauración de Huayra GNU/Linux asi como \Z2$PARTS_WIN\Zn para Windows" 0 0
 	
 	if [ $DEBUG == 1 ]; then
-		dialog --title "Debug" --msgbox "ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA\n\nocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
+		dialog --title "Debug" --msgbox "ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA\n\nocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
 	else
 		efi_umount
-		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
-		ocs-sr -q2 -c -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN
+		ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
+		ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN
 	fi
 	menu_avanzado
 	
