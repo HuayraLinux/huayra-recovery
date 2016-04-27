@@ -72,6 +72,7 @@ function limpieza_particiones
 		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" --msgbox "Eliminando archivos..." 0 0
 		else
+			# Particion de Huayra
 			TMPMOUNT=`mktemp -d`
 			mount $ROOT_HUAYRA $TMPMOUNT
 			rm -f $TMPMOUNT/root/.bash_history
@@ -93,6 +94,10 @@ function limpieza_particiones
 			rm -rf $TMPMOUNT/home/alumno/.mozilla
 			rm -f $TMPMOUNT/home/alumno/.xsession-errors*
 			umount $TMPMOUNT
+			
+			# Particion de Recuperacion
+			rm -rf /var/log/*
+			rm /root/.bash_history
 		fi
 		menu_avanzado
 		;;
