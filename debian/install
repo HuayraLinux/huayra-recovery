@@ -1,3 +1,4 @@
 debian/dialogrc	etc/huayra/
 debian/scripts/huayra-recovery	usr/sbin/
 debian/scripts/huayra-recovery-adv usr/share/huayra-recovery/
+debian/scripts/change-hostname usr/sbin/

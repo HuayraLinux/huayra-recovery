@@ -1,3 +1,9 @@
+huayra-recovery (1.5) unstable; urgency=medium
+
+  * Agregando script para cambio de hostname al limpiar las particiones
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Mon, 09 May 2016 14:31:17 -0300
+
 huayra-recovery (1.4) unstable; urgency=medium
 
   * agregando delay y fix sda4

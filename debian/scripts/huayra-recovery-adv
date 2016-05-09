@@ -98,6 +98,9 @@ function limpieza_particiones
 			# Particion de Recuperacion
 			rm -rf /var/log/*
 			rm /root/.bash_history
+			
+			# cambio de hostname (windows y Huayra)
+			change-hostname -l -w -y -n CI000000000000
 		fi
 		menu_avanzado
 		;;
