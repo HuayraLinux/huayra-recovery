@@ -20,10 +20,10 @@ if [ -z $DIALOGRC ]; then
 fi
 export DIALOGRC
 
-if [ -z $ADV_MENU ]; then
-	ADV_MENU=/usr/share/huayra-recovery/huayra-recovery-adv
+if [ -z $ADV_MENU_FILE ]; then
+       ADV_MENU_FILE=/usr/share/huayra-recovery/huayra-recovery-adv
 fi
-export ADV_MENU
+export ADV_MENU_FILE
 
 if [ -z $DEBUG ]; then
     DEBUG=0
@@ -47,6 +47,11 @@ export ROOT_HUAYRA
 
 EFI_PART="/dev/sda3"
 export EFI_PART
+
+# permite sobreescribir las variables usadas desde el archivo de config
+if [ -f /etc/default/huayra-recovery ]; then
+	source /etc/default/huayra-recovery
+fi
 
 #
 # iniciar y detectar el cargador
@@ -109,7 +114,7 @@ function inicio
 function menu_principal
 {
 	exec 3>&1
-	if [ -f $ADV_MENU ]; then
+	if [ $ADV_MENU = 1 ]; then
 		result=$(dialog --nocancel --ok-label "Aceptar" \
 			--default-item "X" --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
 			--colors \
@@ -154,7 +159,7 @@ function menu_principal
 				menu_principal
 			;;
 			4)
-				source $ADV_MENU
+				source $ADV_MENU_FILE
 				menu_avanzado
 			;;
 			X)

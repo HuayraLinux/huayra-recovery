@@ -3,26 +3,41 @@
 huayra-recovery \- scripts para el sistema de recuperación
 
 .SH SYNOPSIS
-.B huayra-recovery
+.B [OPCION1=VALOR1] [OPCION2=VALOR2] huayra-recovery
 
 .SH DESCRIPTION
 
+Esta herramienta se utiliza para el sistema de recuperación.
 
+.SH ENVIRONMENT
 
-.SH VARIABLES
-
-Estas variables se usan basicamente en modo de desarrollo
+Estas variables se usan básicamente en modo de desarrollo
 
 .B ADV_MENU 
-Archivo del menu avanzado (por defecto /usr/share/huayra/recovery/huarya-recovery-adv) 
+Si su valor es 1, se muestra el menu avanzado (deshabilitado por defecto)
+
+.B ADV_MENU_FILE 
+Archivo del menu avanzado (por defecto /usr/share/huayra/recovery/huarya-recovery-adv)
 
 .B CONECTADO
-Si se fuerza a 1 se pasa de alto la comprobacion de conexion a la red electrica
+Si se fuerza a 1 se pasa de alto la comprobación de conexión a la red eléctrica
 
 .B DIALOGRC 
-Archivo de configuracion de dialog (por defecto (/etc/huayra/dialogrc)
+Archivo de configuración de dialog (por defecto (/etc/huayra/dialogrc)
 
 .B DEBUG
-Si se fuerza a 1 no se realizan las operaciones
+Si se fuerza a 1 no se realizan las operaciones y se muestra un diálogo con las acciones
+
+
+Ejemplo: 
+
+.B DEBUG=1 ADV_MENU=1 huayra-recovery 
+
+.SH FILES
+
+/etc/default/huayra-recovery
+
+Estas variables se pueden utilizar, creando el archivo /etc/default/huayra-recovery y
+agregándolas al mismo.
 
 See http://github.com/HuayarLinux/huayra-recovery

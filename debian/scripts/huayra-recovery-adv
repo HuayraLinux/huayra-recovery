@@ -1,3 +1,4 @@
+#!/bin/bash
 # Menu Avanzado
 function menu_avanzado
 {
@@ -176,7 +177,7 @@ function eliminar_menu_adv
 	result=$(dialog --backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
 		--title "Eliminar menu avanzado" \
 		--colors \
-		--yesno "Ésta operación va a \Z2eliminar permanentemente\Zn éste menú avanzado de la herramienta.\n\nNo podrá volver a acceder al mismo, una vez realizada dicha operación\n\n¿Desea eliminar archivos de logs e historiales\npara preparar las particiones antes de hacer la imágen final?" 0 0 2>&1 1>&3)
+		--yesno "Ésta operación va a \Z2eliminar\Zn éste item de menú avanzado de la herramienta.\n\nPara volver a activarlo, deberá generar el archivo \Z2/etc/default/huayra-recovery\Zn con la variable \Z2ADV_MENU=1\Zn \n\n¿Desea continuar?" 0 0 2>&1 1>&3)
 
 	return_value=$?
 	exec 3>&-
@@ -186,12 +187,14 @@ function eliminar_menu_adv
 		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" --msgbox "Eliminando archivo de menu" 0 0
 		else
-			rm -f /usr/share/huayra-recovery/huayra-recovery-adv
+			rm -f /etc/default/huayra-recovery
 		fi
 		dialog --ok-label "Aceptar" \
 			--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
 			--colors \
 			--title "Menu avanzado" --msgbox "El archivo ha sido eliminado" 0 0 
+
+		unset ADV_MENU
 		menu_principal
 		;;
 	  $DIALOG_CANCEL)
