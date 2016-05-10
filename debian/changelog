@@ -1,3 +1,9 @@
+huayra-recovery (1.6) unstable; urgency=medium
+
+  * usando archivo /etc/default/huayra-recovery 
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Tue, 10 May 2016 12:26:22 -0300
+
 huayra-recovery (1.5) unstable; urgency=medium
 
   * Agregando script para cambio de hostname al limpiar las particiones
