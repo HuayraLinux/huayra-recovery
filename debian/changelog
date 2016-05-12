@@ -1,3 +1,9 @@
+huayra-recovery (1.7) unstable; urgency=medium
+
+  * agregando dependencia chntpw
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Thu, 12 May 2016 09:52:40 -0300
+
 huayra-recovery (1.6) unstable; urgency=medium
 
   * usando archivo /etc/default/huayra-recovery 
