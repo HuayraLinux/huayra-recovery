@@ -1,3 +1,10 @@
+huayra-recovery (1.8) unstable; urgency=medium
+
+  * agregado de mas archivos para limpieza
+  * opción por defecto en NO para la patanlla de bienvenida
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Fri, 20 May 2016 14:31:48 -0300
+
 huayra-recovery (1.7) unstable; urgency=medium
 
   * agregando dependencia chntpw

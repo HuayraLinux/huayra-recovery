@@ -94,12 +94,16 @@ function limpieza_particiones
 			rm -f $TMPMOUNT/home/alumno/.local/share/Trash/info/*
 			rm -rf $TMPMOUNT/home/alumno/.mozilla
 			rm -f $TMPMOUNT/home/alumno/.xsession-errors*
+			rm -f $TMPMOUNT/home/alumno/.local/share/*recently-used*
+			rm -rf $TMPMOUNT/home/alumno/.local/share/mc
+			rm -rf $TMPMOUNT/home/alumno/.local/share/gvfs-metadata
 			umount $TMPMOUNT
 			
 			# Particion de Recuperacion
 			rm -rf /var/log/*
-			rm /root/.bash_history
-			
+			rm -f /root/.bash_history
+			rm -f /root/*.deb
+
 			# cambio de hostname (windows y Huayra)
 			change-hostname -l -w -y -n CI000000000000
 		fi
