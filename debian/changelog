@@ -1,3 +1,9 @@
+huayra-recovery (1.10) unstable; urgency=medium
+
+  * fix de tamaño de ventana
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Fri, 10 Jun 2016 12:06:20 -0300
+
 huayra-recovery (1.9) unstable; urgency=medium
 
   * agregado de opcion para verificar particiones

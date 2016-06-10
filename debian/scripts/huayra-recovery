@@ -119,7 +119,7 @@ function menu_principal
 			--default-item "X" --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
 			--colors \
 			--title " \Z3Elija la tarea a realizar\Zn " \
-			--menu  "" 14 50  6\
+			--menu  "" 14 50  7\
 			"1" "Restaurar Microsoft Windows 8.1"  \
 			"2" "Restaurar Huayra GNU/linux" \
 			"3" "Restaurar ambos Sistemas Operativos"  \
@@ -133,7 +133,7 @@ function menu_principal
 			--default-item "X" --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
 			--colors \
 			--title " \Z3Elija la tarea a realizar\Zn " \
-			--menu  "" 14 50  6\
+			--menu  "" 14 50  7\
 			"1" "Restaurar Microsoft Windows 8.1"  \
 			"2" "Restaurar Huayra GNU/linux" \
 			"3" "Restaurar ambos Sistemas Operativos"  \
