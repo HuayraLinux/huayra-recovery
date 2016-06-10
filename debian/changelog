@@ -1,3 +1,9 @@
+huayra-recovery (1.9) unstable; urgency=medium
+
+  * agregado de opcion para verificar particiones
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Fri, 10 Jun 2016 11:26:13 -0300
+
 huayra-recovery (1.8) unstable; urgency=medium
 
   * agregado de mas archivos para limpieza

@@ -106,6 +106,7 @@ function limpieza_particiones
 
 			# cambio de hostname (windows y Huayra)
 			change-hostname -l -w -y -n CI000000000000
+			pause 'Presione [ENTER] para continuar... '
 		fi
 		menu_avanzado
 		;;
