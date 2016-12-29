@@ -1,3 +1,11 @@
+huayra-recovery (1.11) unstable; urgency=medium
+
+  * fix lintian
+  * limpieza de hayra-tda closes #1
+  * quitamos de la limpieza el directorio de gvfs porque guarda la posicion de iconos del escritorio de caja closes #2
+
+ -- Fernando Toledo <ragnarok@docksud.com.ar>  Thu, 29 Dec 2016 11:14:43 -0300
+
 huayra-recovery (1.10) unstable; urgency=medium
 
   * fix de tamaño de ventana
