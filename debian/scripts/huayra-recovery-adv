@@ -97,6 +97,7 @@ function limpieza_particiones
 			rm -f $TMPMOUNT/home/alumno/.local/share/*recently-used*
 			rm -rf $TMPMOUNT/home/alumno/.local/share/mc
 			rm -rf $TMPMOUNT/home/alumno/.local/share/gvfs-metadata
+			rm -f $TMPMOUNT/home/alumno/.huayra-tda-channels.conf
 			umount $TMPMOUNT
 			
 			# Particion de Recuperacion
