@@ -90,8 +90,7 @@ function limpieza_particiones
 			rm -f $TMPMOUNT/home/alumno/.bash_history
 			rm -rf $TMPMOUNT/home/alumno/.cache
 			rm -rf $TMPMOUNT/home/alumno/.adobe
-			rm -f $TMPMOUNT/home/alumno/.local/share/Trash/files/*
-			rm -f $TMPMOUNT/home/alumno/.local/share/Trash/info/*
+			rm -rf $TMPMOUNT/home/alumno/.local/share/Trash
 			rm -rf $TMPMOUNT/home/alumno/.mozilla
 			rm -f $TMPMOUNT/home/alumno/.xsession-errors*
 			rm -f $TMPMOUNT/home/alumno/.local/share/*recently-used*
