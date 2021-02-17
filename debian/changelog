@@ -1,3 +1,9 @@
+huayra-recovery (1.12) UNRELEASED; urgency=medium
+
+  * Version simple sin windows.
+
+ -- Matias De lellis <mati86dl@gmail.com>  Wed, 17 Feb 2021 16:48:04 -0300
+
 huayra-recovery (1.11) unstable; urgency=medium
 
   * fix lintian

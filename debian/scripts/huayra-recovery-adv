@@ -10,11 +10,9 @@ function menu_avanzado
 			--colors \
 			--title " \Z3Elija la tarea a realizar\Zn " \
 			--menu  "" 15 80  6 \
-			"1" "Guardar partición de Windows 8.1 al disco de recuperación" \
-			"2" "Guardar partición de Huayra GNU/Linux al disco de recuperación" \
-			"3" "Guardar ambos Sistemas Operativos al disco de recuperación" \
-			"4" "Limpieza de Historial para preparar Imágen" \
-			"5" "Eliminar \Z3permanentemente\Zn éste menu" \
+			"1" "Guardar partición de Huayra GNU/Linux al disco de recuperación" \
+			"2" "Limpieza de Historial para preparar Imágen" \
+			"3" "Eliminar \Z3permanentemente\Zn éste menu" \
 			"X" "Volver al Menu Principal" 2>&1 1>&3)
 
 	return_value=$?
@@ -24,18 +22,12 @@ function menu_avanzado
 	  $DIALOG_OK)
 		case $result in
 			1)
-				guardar_windows
-			;;
-			2)
 				guardar_huayra
 			;;
-			3)
-				guardar_ambos
-			;;
-			4)
+			2)
 				limpieza_particiones
 			;;
-			5)
+			3)
 				eliminar_menu_adv
 			;;
 			"")
@@ -104,7 +96,7 @@ function limpieza_particiones
 			rm -f /root/*.deb
 
 			# cambio de hostname (windows y Huayra)
-			change-hostname -l -w -y -n CI000000000000
+			change-hostname -l -y -n CI000000000000
 			pause 'Presione [ENTER] para continuar... '
 		fi
 		menu_avanzado
@@ -116,24 +108,6 @@ function limpieza_particiones
 		menu_avanzado
 		;;
 	esac
-
-}
-# Operación para guardar la imagen de windows
-function guardar_windows
-{
-	dialog --nocancel \
-		--ok-label "Aceptar" \
-		--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
-		--colors \
-		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_WIN\Zn como imágen de Restauración de Windows" 0 0
-	
-	if [ $DEBUG == 1 ]; then
-		dialog --title "Debug" --msgbox "ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
-	else
-		efi_umount
-		ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN
-	fi
-	menu_avanzado
 }
 
 # Operación para guardar la imagen de Huayra
@@ -152,26 +126,6 @@ function guardar_huayra
 		ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
 	fi
 	menu_avanzado
-}
-
-# Operación para guardar ambas imágenes
-function guardar_ambos
-{
-	dialog --nocancel \
-		--ok-label "Aceptar" \
-		--backtitle "..:: \Z3Sistema de Recuperación - MENU AVANZADO \Zn ::.." \
-		--colors \
-		--msgbox "Presione aceptar para guardar las particiones: \Z2$PARTS_HUAYRA\Zn como imágen de Restauración de Huayra GNU/Linux asi como \Z2$PARTS_WIN\Zn para Windows" 0 0
-	
-	if [ $DEBUG == 1 ]; then
-		dialog --title "Debug" --msgbox "ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA\n\nocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN" 0 0
-	else
-		efi_umount
-		ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts huayra-img $PARTS_HUAYRA
-		ocs-sr -q2 -j2 -z1p -i 2000 -p true saveparts windows-img $PARTS_WIN
-	fi
-	menu_avanzado
-	
 }
 
 # Eliminación del archivo del menu avanzado
@@ -208,6 +162,4 @@ function eliminar_menu_adv
 		menu_avanzado
 		;;
 	esac
-
 }
-

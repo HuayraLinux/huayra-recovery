@@ -36,9 +36,7 @@ fi
 export CONECTADO
 
 # Particiones para guardar/recuperar
-PARTS_WIN="sda2 sda3 sda5"
 PARTS_HUAYRA="sda1 sda3"
-export PARTS_WIN
 export PARTS_HAUYRA
 
 # root donde se encuentra Huayra instalado (para eliminar temporales)
@@ -47,6 +45,9 @@ export ROOT_HUAYRA
 
 EFI_PART="/dev/sda3"
 export EFI_PART
+
+HOME_PART="/dev/sda4"
+export HOME_PART
 
 # permite sobreescribir las variables usadas desde el archivo de config
 if [ -f /etc/default/huayra-recovery ]; then
@@ -120,12 +121,10 @@ function menu_principal
 			--colors \
 			--title " \Z3Elija la tarea a realizar\Zn " \
 			--menu  "" 14 50  7\
-			"1" "Restaurar Microsoft Windows 8.1"  \
-			"2" "Restaurar Huayra GNU/linux" \
-			"3" "Restaurar ambos Sistemas Operativos"  \
-			"4" "Verificar particiones"  \
+			"1" "Restaurar Huayra GNU/linux" \
+			"2" "Verificar particiones"  \
 			"" "-----------------------------------" \
-			"5" "Menu Avanzado" \
+			"3" "Menu Avanzado" \
 			"X" "Salir" 2>&1 1>&3)
 	
 	else
@@ -134,10 +133,8 @@ function menu_principal
 			--colors \
 			--title " \Z3Elija la tarea a realizar\Zn " \
 			--menu  "" 14 50  7\
-			"1" "Restaurar Microsoft Windows 8.1"  \
-			"2" "Restaurar Huayra GNU/linux" \
-			"3" "Restaurar ambos Sistemas Operativos"  \
-			"4" "Verificar particiones"  \
+			"1" "Restaurar Huayra GNU/linux" \
+			"2" "Verificar particiones"  \
 			"" "-----------------------------------" \
 			"X" "Salir" 2>&1 1>&3)
 
@@ -149,21 +146,15 @@ function menu_principal
 	  $DIALOG_OK)
 		case $result in
 			1)
-				restaurar_windows
-			;;
-			2)
 				restaurar_huayra
-			;;
-			3)
-				restaurar_ambos
 			;;
 			"")
 				menu_principal
 			;;
-			4)
+			2)
 				verificar_particiones
 			;;
-			5)
+			3)
 				source $ADV_MENU_FILE
 				menu_avanzado
 			;;
@@ -263,73 +254,6 @@ function restaurar_huayra
 
 }
 
-# Restaurar la imagen de Windows
-function restaurar_windows
-{
-	exec 3>&1
-	result=$(dialog \
-        --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
-		--colors \
-		--title " \Z3RESTAURAR WINDOWS\Zn " \
-		--yesno "Se va a restaurar el Sistema Operativo Windows a la imágen original de fábrica. \n\nLa información que se encuentre en la partición de DATOS no será modificada. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
-
-	return_value=$?
-	exec 3>&-
-
-	case $return_value in
-	  $DIALOG_OK)
-		if [ $DEBUG == 1 ]; then
-			dialog --title "Debug" \
-				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN" 0 0
-		else
-			efi_umount
-			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN
-		fi
-		;;
-	  $DIALOG_CANCEL)
-		inicio
-		;;
-	  $DIALOG_ESC)
-		inicio
-		;;
-	esac
-
-}
-
-# Restaurar ambas imagenes de los sistemas operativos
-function restaurar_ambos
-{
-	exec 3>&1
-	result=$(dialog \
-        --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
-		--colors \
-		--title " \Z3RESTAURAR AMBOS SISTEMAS\Zn " \
-		--yesno "Se van a restaurar los Sistemas Operativos Huayra GNU/Linux y Windows a la imágen original de fábrica. \n\nLa información que se encuentre en la partición de DATOS no será modificada. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
-
-	return_value=$?
-	exec 3>&-
-
-	case $return_value in
-	  $DIALOG_OK)
-		if [ $DEBUG == 1 ]; then
-			dialog --title "Debug" \
-				--msgbox "ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA\n\nocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN" 0 0
-		else
-			efi_umount
-			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts huayra-img $PARTS_HUAYRA
-			ocs-sr -g auto -e1 auto -e2 -b -r -j2 -k -p true restoreparts windows-img $PARTS_WIN
-		fi
-		;;
-	  $DIALOG_CANCEL)
-		inicio
-		;;
-	  $DIALOG_ESC)
-		inicio
-		;;
-	esac
-
-}
-
 function verificar_particiones 
 {
 	exec 3>&1
@@ -346,14 +270,10 @@ function verificar_particiones
 	  $DIALOG_OK)
 		if [ $DEBUG == 1 ]; then
 			dialog --title "Debug" \
-				--msgbox "fsck $ROOT_HUAYRA\nntfsfix /dev/sda5 /dev/sda8 /dev/sda9" 0 0
+				--msgbox "fsck $ROOT_HUAYRA $HOME_PART" 0 0
 		else
 			fsck $ROOT_HUAYRA
-			
-			for p in /dev/sda5 /dev/sda8 /dev/sda9
-			do
-				ntfsfix $p
-			done
+			fsck $HOME_PART
 		fi
 		pause 'Presione [ENTER] para continuar...'
 		inicio
