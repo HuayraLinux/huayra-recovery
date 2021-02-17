@@ -35,18 +35,27 @@ if [ -z $CONECTADO ]; then
 fi
 export CONECTADO
 
+
+# Particionado implementado.
+#
+# +-----------+-----------+-----------+-----------+-----------+
+# | /dev/sda1 | /dev/sda2 | /dev/sda3 | /dev/sda4 | /dev/sda5 |
+# +-----------+-----------+-----------+-----------+-----------+
+# |    EFI    |    SWAP   |  RECOVERY |   HUAYRA  |   DATOS   |
+# +-----------+-----------+-----------+-----------+-----------+
+
 # Particiones para guardar/recuperar
-PARTS_HUAYRA="sda1 sda3"
+PARTS_HUAYRA="sda1 sda4"
 export PARTS_HAUYRA
 
 # root donde se encuentra Huayra instalado (para eliminar temporales)
-ROOT_HUAYRA="/dev/sda1"
+ROOT_HUAYRA="/dev/sda4"
 export ROOT_HUAYRA
 
-EFI_PART="/dev/sda3"
+EFI_PART="/dev/sda1"
 export EFI_PART
 
-HOME_PART="/dev/sda4"
+HOME_PART="/dev/sda5"
 export HOME_PART
 
 # permite sobreescribir las variables usadas desde el archivo de config
@@ -217,7 +226,6 @@ function saludo
 		salir
 		;;
 	esac
-       
 }
 
 # Restaurar la imagen de Huayra
@@ -251,7 +259,6 @@ function restaurar_huayra
 		inicio
 		;;
 	esac
-
 }
 
 function verificar_particiones 
@@ -285,20 +292,21 @@ function verificar_particiones
 		inicio
 		;;
 	esac
-	
 }
+
 # Desmonta la particion EFI si estámontada para poder restaurar o guardar
 function efi_umount
 {
 	if grep -qs $EFI_PART /proc/mounts; then
 		umount $EFI_PART
-	fi	
+	fi
 }
 
 function pause 
 {
     read -p "$*"
 }
+
 ## main
 ## mostrar intro
 saludo
