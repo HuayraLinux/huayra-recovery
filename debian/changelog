@@ -1,3 +1,9 @@
+huayra-recovery (1.14) torbellino; urgency=medium
+
+  * Varios arreglos.
+
+ -- Matias De lellis <mati86dl@gmail.com>  Wed, 24 Feb 2021 18:22:01 -0300
+
 huayra-recovery (1.13) torbellino; urgency=medium
 
   * Agrega dependencia a acpi.

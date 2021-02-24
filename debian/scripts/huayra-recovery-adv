@@ -79,15 +79,15 @@ function limpieza_particiones
 			rm -f $TMPMOUNT/var/log/ConsoleKit/*.gz
 			rm -f $TMPMOUNT/var/log/cups/*.gz
 			rm -f $TMPMOUNT/var/lib/apt/lists/*.gz
-			rm -f $TMPMOUNT/home/alumno/.bash_history
-			rm -rf $TMPMOUNT/home/alumno/.cache
-			rm -rf $TMPMOUNT/home/alumno/.adobe
-			rm -rf $TMPMOUNT/home/alumno/.local/share/Trash
-			rm -rf $TMPMOUNT/home/alumno/.mozilla
-			rm -f $TMPMOUNT/home/alumno/.xsession-errors*
-			rm -f $TMPMOUNT/home/alumno/.local/share/*recently-used*
-			rm -rf $TMPMOUNT/home/alumno/.local/share/mc
-			rm -f $TMPMOUNT/home/alumno/.huayra-tda-channels.conf
+			rm -f $TMPMOUNT/home/estudiante/.bash_history
+			rm -rf $TMPMOUNT/home/estudiante/.cache
+			rm -rf $TMPMOUNT/home/estudiante/.adobe
+			rm -rf $TMPMOUNT/home/estudiante/.local/share/Trash
+			rm -rf $TMPMOUNT/home/estudiante/.mozilla
+			rm -f $TMPMOUNT/home/estudiante/.xsession-errors*
+			rm -f $TMPMOUNT/home/estudiante/.local/share/*recently-used*
+			rm -rf $TMPMOUNT/home/estudiante/.local/share/mc
+			rm -f $TMPMOUNT/home/estudiante/.huayra-tda-channels.conf
 			umount $TMPMOUNT
 			
 			# Particion de Recuperacion
@@ -95,7 +95,7 @@ function limpieza_particiones
 			rm -f /root/.bash_history
 			rm -f /root/*.deb
 
-			# cambio de hostname (windows y Huayra)
+			# cambio de hostname Huayra
 			change-hostname -l -y -n CI000000000000
 			pause 'Presione [ENTER] para continuar... '
 		fi
