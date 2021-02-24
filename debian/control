@@ -9,7 +9,7 @@ Package: huayra-recovery
 Architecture: all
 Depends:  ${shlibs:Depends}, ${misc:Depends}, coreutils (>= 8.23), clonezilla,
  dialog, dosfstools, parted, bc, util-linux (>= 2.25), partclone (>= 0.2),
- gdisk (>= 0.8), chntpw (>= 1.0)
+ gdisk (>= 0.8), chntpw (>= 1.0), acpi, ntfs-3g
 Description: Scripts para el sistema de recuperación de las netbooks del PCI
  Este paquete contiene los scripts para la particiones de recuperación que
  tienen las netbooks del Programa Conectar Igualdad.
