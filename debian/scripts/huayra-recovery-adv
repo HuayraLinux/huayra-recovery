@@ -72,7 +72,7 @@ function limpieza_particiones
 			rm -rf $TMPMOUNT/root/.config
 			rm -rf $TMPMOUNT/root/.local
 			rm -f $TMPMOUNT/etc/udev/rules.d/70-persistent-net.rules
-			rm -f $TMPMOUNT/etc/NetworkManager/system-connection/*
+			rm -f $TMPMOUNT/etc/NetworkManager/system-connections/*
 			rm -f $TMPMOUNT/var/cache/apt/archives/*.deb
 			rm -f $TMPMOUNT/var/backups/*.gz
 			rm -f $TMPMOUNT/var/log/*.gz

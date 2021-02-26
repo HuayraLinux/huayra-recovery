@@ -1,3 +1,9 @@
+huayra-recovery (1.16) torbellino; urgency=medium
+
+  * Arregla limpiaza de conecciones wifi
+
+ -- Matias De lellis <mati86dl@gmail.com>  Fri, 26 Feb 2021 12:12:41 -0300
+
 huayra-recovery (1.15) torbellino; urgency=medium
 
   * Arreglos de textos, y limpieza del historial.
