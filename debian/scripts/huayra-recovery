@@ -268,7 +268,7 @@ function verificar_particiones
         --backtitle "..:: \Z3Sistema de Recuperación\Zn ::.." \
 		--colors \
 		--title " \Z3VERIFICAR PARTICONES\Zn " \
-		--yesno "Se va a verificar la particion del Sistema Operativos Huayra GNU/Linux (mediante fsck) para corregir errores comunes. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
+		--yesno "Se va a verificar la particion del Sistema Operativo Huayra GNU/Linux (mediante fsck) para corregir errores comunes. \n\n¿Desea continuar?" 12 50 2>&1 1>&3)
 
 	return_value=$?
 	exec 3>&-
