@@ -211,7 +211,7 @@ function saludo
         --title " \Z3AVISO IMPORTANTE\Zn " \
         --colors \
 	--defaultno \
-        --yesno  "Mediante esta herramienta, Usted puede restaurar las particiones de los Sistemas Operativos a las imágenes oririginales de fábrica. \n\nLa información que se encuentre en la particion de DATOS \Z3no será modificada\Zn. \nSin embargo, cualquier dato que haya sido guardado en las particiones de los Sistemas Operativos \Z3se perderá definitivamente\Zn.\n\n¿Desea continuar?" 0 0 2>&1 1>&3)
+        --yesno  "Mediante esta herramienta, usted puede restaurar el Sistema Operativo al estado original de fábrica. \n\nLa información que se encuentre en la particion del usuario \Z3no será modificada\Zn. \nSin embargo, cualquier dato que haya sido guardado en las particiones del Sistema Operativo \Z3se perderá definitivamente\Zn.\n\n¿Desea continuar?" 20 35 2>&1 1>&3)
 
 	return_value=$?
 	exec 3>&-
